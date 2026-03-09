@@ -10,9 +10,15 @@
 
 <div class="product-card">
 
-{% if product.images.first %}
-<img class="product-image" src="{{ product.images.first.image.url }}">
+<a href="{% url 'product_detail' product.id %}">
+
+{% with image=product.images.first %}
+{% if image %}
+<img class="product-image" src="{{ image.image.url }}">
 {% endif %}
+{% endwith %}
+
+</a>
 
 <div class="product-info">
 
