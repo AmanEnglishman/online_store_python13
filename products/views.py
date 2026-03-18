@@ -1,3 +1,4 @@
+from django.db.models import Avg
 from django.shortcuts import render, get_object_or_404, redirect
 
 from .models import Product, Category, Review
@@ -23,6 +24,9 @@ def product_detail(request, pk):
     specifications = product.productspecification_set.all()
     reviews = product.reviews.all().order_by('-created_at')
 
+    avg_rating = reviews.aggregate(avg=Avg('rating'))['avg'] or 0
+    avg_rating = round(avg_rating, 1)
+
     form = ReviewForm()
 
     if request.method == 'POST':
@@ -35,13 +39,17 @@ def product_detail(request, pk):
                 review.save()
                 return redirect('product_detail', pk=pk)
 
-
     context = {
         "product": product,
         "specifications": specifications,
         'reviews': reviews,
-        'form': form
+        'form': form,
+        'avg_rating': avg_rating,
     }
 
     return render(request, "product_detail.html", context)
 
+'''
+Выводить среднюю ариф в product_detail.html 
+сумма всех рейтингов делим на их количество
+'''

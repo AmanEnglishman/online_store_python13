@@ -95,6 +95,20 @@ border-radius:6px;
 cursor:pointer;
 }
 
+.avg-rating{
+margin:10px 0 20px;
+font-size:18px;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.big-rating{
+font-size:26px;
+font-weight:bold;
+color:#2c3e50;
+}
+
 </style>
 
 <div class="product-page">
@@ -117,6 +131,18 @@ cursor:pointer;
 <hr>
 
 <h2>Reviews</h2>
+    <div class="avg-rating">
+    <span class="big-rating">{{ avg_rating }}</span> / 5
+    <span class="stars">
+        {% for i in "12345" %}
+            {% if forloop.counter <= avg_rating %}
+                ⭐
+            {% else %}
+                ☆
+            {% endif %}
+        {% endfor %}
+    </span>
+</div>
 
 {% if user.is_authenticated %}
 
