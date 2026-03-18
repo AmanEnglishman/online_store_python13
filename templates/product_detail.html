@@ -10,6 +10,8 @@ grid-template-columns:1fr 1fr;
 gap:50px;
 }
 
+/* LEFT SIDE */
+
 .product-main-img{
 width:100%;
 border-radius:10px;
@@ -28,6 +30,8 @@ object-fit:cover;
 border-radius:6px;
 cursor:pointer;
 }
+
+/* RIGHT SIDE */
 
 .product-name{
 font-size:32px;
@@ -54,34 +58,127 @@ margin-top:30px;
 margin-bottom:8px;
 }
 
+/* REVIEWS */
+
+.reviews{
+margin-top:30px;
+}
+
+.review{
+background:white;
+padding:15px;
+border-radius:8px;
+margin-bottom:15px;
+box-shadow:0 2px 5px rgba(0,0,0,0.05);
+}
+
+.stars{
+color:gold;
+font-size:18px;
+margin:5px 0;
+}
+
+textarea{
+width:100%;
+height:100px;
+padding:10px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+button{
+background:#27ae60;
+color:white;
+border:none;
+padding:10px 15px;
+border-radius:6px;
+cursor:pointer;
+}
+
 </style>
 
 <div class="product-page">
 
-<!-- LEFT SIDE IMAGES -->
+<!-- LEFT SIDE -->
 
 <div>
 
 {% with main=product.images.first %}
-{% if main %}
-<img class="product-main-img" src="{{ main.image.url }}">
+{% if main %} <img class="product-main-img" src="{{ main.image.url }}">
 {% endif %}
 {% endwith %}
 
 <div class="gallery">
-
 {% for img in product.images.all %}
-
 <img src="{{ img.image.url }}">
+{% endfor %}
+</div>
 
+<hr>
+
+<h2>Reviews</h2>
+
+{% if user.is_authenticated %}
+
+<form method="post">
+    {% csrf_token %}
+
+<label>Rating:</label>
+<select name="rating">
+    <option value="5">★★★★★</option>
+    <option value="4">★★★★</option>
+    <option value="3">★★★</option>
+    <option value="2">★★</option>
+    <option value="1">★</option>
+</select>
+
+<br><br>
+
+<textarea name="comment" placeholder="Write your review..." required></textarea>
+
+<br><br>
+
+<button type="submit">Submit Review</button>
+
+</form>
+
+{% else %}
+
+<p>You must be logged in to leave a review.</p>
+{% endif %}
+
+<div class="reviews">
+
+{% for review in reviews %}
+
+<div class="review">
+<strong>{{ review.user.username }}</strong>
+
+<div class="stars">
+{% for i in "12345" %}
+    {% if forloop.counter <= review.rating %}
+        ⭐
+    {% else %}
+        ☆
+    {% endif %}
+{% endfor %}
+</div>
+
+<p>{{ review.comment }}</p>
+<small>{{ review.created_at }}</small>
+
+</div>
+
+{% empty %}
+
+<p>No reviews yet.</p>
 {% endfor %}
 
 </div>
 
 </div>
 
-
-<!-- RIGHT SIDE INFO -->
+<!-- RIGHT SIDE -->
 
 <div>
 
@@ -100,15 +197,11 @@ $ {{ product.price }}
 <h3>Specifications</h3>
 
 <ul class="specs">
-
 {% for spec in specifications %}
-
 <li>
 <strong>{{ spec.name }}:</strong> {{ spec.value }}
 </li>
-
 {% endfor %}
-
 </ul>
 
 </div>
