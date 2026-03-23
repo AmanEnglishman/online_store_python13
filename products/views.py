@@ -48,8 +48,3 @@ def product_detail(request, pk):
     }
 
     return render(request, "product_detail.html", context)
-
-'''
-Выводить среднюю ариф в product_detail.html 
-сумма всех рейтингов делим на их количество
-'''
