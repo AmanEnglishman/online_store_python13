@@ -32,15 +32,19 @@ gap:10px;
 margin:15px 0;
 ">
 
-<button style="
-width:30px;
-height:30px;
-border:none;
-background:#eee;
-border-radius:6px;
-cursor:pointer;
-font-size:18px;
-">−</button>
+<!-- DECREASE -->
+<form action="{% url 'decrease_quantity' item.id %}" method="post">
+    {% csrf_token %}
+    <button type="submit" style="
+    width:30px;
+    height:30px;
+    border:none;
+    background:#eee;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:18px;
+    ">−</button>
+</form>
 
 <div style="
 min-width:30px;
@@ -50,15 +54,19 @@ font-weight:bold;
 {{ item.quantity }}
 </div>
 
-<button style="
-width:30px;
-height:30px;
-border:none;
-background:#eee;
-border-radius:6px;
-cursor:pointer;
-font-size:18px;
-">+</button>
+<!-- INCREASE -->
+<form action="{% url 'increase_quantity' item.id %}" method="post">
+    {% csrf_token %}
+    <button type="submit" style="
+    width:30px;
+    height:30px;
+    border:none;
+    background:#eee;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:18px;
+    ">+</button>
+</form>
 
 </div>
 
@@ -68,19 +76,22 @@ $ {{ item.get_total_price }}
 </div>
 
 <!-- REMOVE BUTTON -->
-<button style="
-margin-top:15px;
-background:#e74c3c;
-color:white;
-border:none;
-padding:8px 12px;
-border-radius:6px;
-cursor:pointer;
-font-size:14px;
-width:100%;
-">
-Remove
-</button>
+<form action="{% url 'remove_from_cart' item.id %}" method="post">
+    {% csrf_token %}
+    <button type="submit" style="
+    margin-top:15px;
+    background:#e74c3c;
+    color:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:14px;
+    width:100%;
+    ">
+    Remove
+    </button>
+</form>
 
 </div>
 
