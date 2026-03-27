@@ -4,13 +4,46 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Category, Review
 from .forms import ReviewForm
 
+from django.shortcuts import render
+from django.db.models import Q
+from .models import Product, Category
+
+
 def home(request):
-    products = Product.objects.prefetch_related('images').all()[:12]
+    products = Product.objects.prefetch_related('images').all()
     categories = Category.objects.filter(parent=None)
+
+    query = request.GET.get('q')
+    category_id = request.GET.get('category')
+
+    # 🔍 Поиск
+    if query:
+        products = products.filter(
+            Q(name__icontains=query) |
+            Q(description__icontains=query)
+        )
+
+    # 📂 Фильтр по категории
+    if category_id:
+        try:
+            category = Category.objects.get(id=category_id)
+
+            # берём все подкатегории
+            subcategories = category.subcategories.all()
+
+            products = products.filter(
+                Q(category=category) |
+                Q(category__in=subcategories)
+            )
+        except Category.DoesNotExist:
+            pass
+
 
     context = {
         'products': products,
-        'categories': categories
+        'categories': categories,
+        'selected_category': category_id,
+        'query': query
     }
 
     return render(request, 'home.html', context)

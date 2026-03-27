@@ -71,3 +71,13 @@ def remove_from_cart(request, item_id):
     item.delete()
 
     return redirect('cart')
+
+
+
+
+
+'''
+1. Поиск / Фильтрация
+2. Профиль
+'''
+
